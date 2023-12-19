@@ -140,16 +140,27 @@ const Head = () => {
     };
   }, [searchQuery]);
 
-  const getSearchSuggestion = async () => {
-    const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
-    const json = await data.json();
-    setSuggestion(json[1]);
-    dispatch(cacheResults({
-      searchQuery :json[1]
-    }))
+  // const getSearchSuggestion = async () => {
+  //   const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
+  //   const json = await data.json();
+  //   setSuggestion(json[1]);
+  //   dispatch(cacheResults({
+  //     searchQuery :json[1]
+  //   }))
+  // };
+
+ const getSearchSuggestion = async () => {
+    await fetch(YOUTUBE_SEARCH_API + searchQuery)
+      .then((data) => data.json())
+      .then((response) => {
+        setSuggestions(response[1]);
+        console.log(response);
+        dispatch(cacheResults({
+          [searchQuery] : response[1],
+        }))
+                  
+      });
   };
-
-
 
   const toggleClickHandler = () => {
     dispatch(toggleMenu());
