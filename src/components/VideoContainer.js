@@ -6,35 +6,25 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 const VideoContainer = () => {
 const [videos, setVideos] = useState([]);
-const [nextPageToken , setNextPageToken] = useState("");
  
  useEffect (()=>{
    getVideos(); 
  },[])
 
 
- useEffect(() =>{
-  window.addEventListener('scroll',infiniteScroll, true);
-  return () =>{
-   window.removeEventListener('scroll', infiniteScroll, true);
-  }
- } ,[nexPageToken]);
+
 
  
  const getVideos = async ()=>{
-  const url = nextPageToken !== ""? `${YOUTUBE_VIDEOS_API}&pageToken=${nextPageToken}`:YOUTUBE_VIDEOS_API;
-  const data = await fetch(url);
+ 
+  const data = await fetch(YOUTUBE_VIDEOS_API);
   const json = await data.json();
-setNextPageToken(json?.nextPageToken);
+
   
-  setVideos(...videos,...json?.items)
+  setVideos(json.items)
  }
  
-const infiniteScroll = () => {
-    if (window.innerHeight + Math.round(document.documentElement.scrollTop) >= document.documentElement.offsetHeight - 300) {
-      getVideos();
-    }
-  }
+
   return (
 
    
